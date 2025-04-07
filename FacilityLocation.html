@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>P-Median Problem with Demand Weights</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 40px;
+      line-height: 1.6;
+    }
+    h2 {
+      color: #2c3e50;
+      text-align: center;
+    }
+    code {
+      background-color: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .math {
+      font-family: 'Cambria Math', 'STIX Math', 'Latin Modern Math', serif;
+      font-size: 1.1em;
+      display: block;
+      margin: 10px 0;
+    }
+    .center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
+    }
+  </style>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+</head>
+<body bgcolor="lightyellow">
+
+  <h1>Facility Location Problem (P-Median) </h1>
+<!-- Centered Image -->
+<img src="FLP_GIF.gif" alt="Facility Location Animation" width="1000" ></img>
+  <div>
+    <br />
+    <div>📍 The Facility Location Problem (FLP) is one of the most fundamental&mdash;and impactful&mdash;challenges in operations research and supply chain design.</div>
+    
+    <div>At its core, FLP asks:</div>
+    <div>➡️ Where should we place facilities to best serve our customers, minimize costs, and maximize efficiency?</div>
+    
+    <div>From the Weber Problem (finding the optimal central point) to modern large-scale logistics networks, FLP plays a key role in shaping how businesses operate.</div>
+    <br />
+    <div>🔍 Where is FLP applied?</div>
+    
+    <div>🏬 Retail chains deciding where to open new stores</div>
+    
+    <div>🏥 Healthcare networks placing hospitals or clinics to serve populations efficiently</div>
+    
+    <div>🏭 Manufacturers optimizing warehouse and distribution center locations</div>
+    
+    <div>🚒 Emergency services placing fire stations or ambulance depots</div>
+    
+    <div>🛰️ Tech companies determining data center locations to reduce latency</div>
+    
+    <h3>There are two main types:</h3>
+    
+    <div><b>Capacitated FLP:</b> Facilities have limits on how much demand they can serve</div>
+    
+    <div><b>Uncapacitated FLP:</b> Facilities can serve unlimited demand&mdash;focus shifts purely to geography</div>
+    <br />
+    <div>Behind the scenes, these problems are often modeled using Mixed-Integer Programming (MIP), and solved with exact or heuristic algorithms depending on scale and complexity.</div>
+    
+    <div>Whether you're optimizing a supply chain, planning public infrastructure, or building the next big thing in logistics tech&mdash;understanding FLP is a powerful step toward smarter, data-driven decisions. 💡</div>
+    
+    <div>Let&rsquo;s connect if you&rsquo;re working on (or curious about) location optimization!</div>
+    <br />
+    <div>#FacilityLocation #Optimization #OperationsResearch #Logistics #SupplyChainDesign #DecisionScience #DataDrivenDecisions #MIP #Heuristics #CPLEX #python</div>
+    </div>
+    <br />
+    
+    <!-- Comments are visible in the HTML source only -->
+
+
+    <h1>Mathematical Formulation </h1>
+
+  
+  <h3>Sets and Parameters:</h3>
+  <ul>
+    <li><strong>I</strong>: Set of demand points</li>
+    <li><strong>J</strong>: Set of candidate facility locations</li>
+    <li><strong>d<sub>ij</sub></strong>: Distance or cost between demand point <em>i</em> and facility <em>j</em></li>
+    <li><strong>w<sub>i</sub></strong>: Demand weight for demand point <em>i</em></li>
+    <li><strong>P</strong>: Number of facilities to open</li>
+  </ul>
+
+  <h3>Decision Variables:</h3>
+  <ul>
+    <li><strong>x<sub>ij</sub></strong>: 1 if demand point <em>i</em> is assigned to facility <em>j</em>, 0 otherwise</li>
+    <li><strong>y<sub>j</sub></strong>: 1 if a facility is opened at location <em>j</em>, 0 otherwise</li>
+  </ul>
+
+  <h3>Objective Function:</h3>
+  <div class="math">
+    \[
+    \min \sum_{i \in I} \sum_{j \in J} w_i \cdot d_{ij} \cdot x_{ij}
+    \]
+  </div>
+
+  <h3>Subject to:</h3>
+  <div class="math">
+    \[
+    \sum_{j \in J} x_{ij} = 1 \quad \forall i \in I \quad \text{(Each demand point is assigned to one facility)}
+    \]
+    \[
+    x_{ij} \le y_j \quad \forall i \in I, \forall j \in J \quad \text{(Assign only to open facilities)}
+    \]
+    \[
+    \sum_{j \in J} y_j = P \quad \text{(Exactly } P \text{ facilities are opened)}
+    \]
+    \[
+    x_{ij}, y_j \in \{0, 1\} \quad \forall i \in I, \forall j \in J \quad \text{(Binary decision variables)}
+    \]
+  </div>
+  <a href="https://github.com/PrasannaMummigatti/facilityLocation/blob/5ee81c1ed859815716cb6671b2d0b7cd307721be/pMedian_animate.py"> Python code</a>
+
+</body>
+</html>
