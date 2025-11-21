@@ -1,0 +1,228 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+<body style="background-color: lightyellow;">
+
+<h2> 🚀 Using Graph Neural Networks (GNNs) to Solve the Facility Location Problem (FLP)</h2><br>
+
+
+        <div class="card" style="width: 50%;height:50%; float:left;margin:auto;background-color: lightyellow;">
+            <h4 class="card" style="background-color: lightyellow;">Interactive Graph (drag to pan, scroll to zoom)</h4>
+            <div id="mynetwork" class="card-body" style="background-color: lightyellow;"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "blue", "font": {"color": "black"}, "id": "C0", "label": "Cust 0\nDemand=20.0", "shape": "dot", "size": 18.0, "x": 50.0, "y": 100.0}, {"color": "blue", "font": {"color": "black"}, "id": "C1", "label": "Cust 1\nDemand=4.0", "shape": "dot", "size": 11.6, "x": 150.0, "y": 150.0}, {"color": "blue", "font": {"color": "black"}, "id": "C2", "label": "Cust 2\nDemand=30.0", "shape": "dot", "size": 22.0, "x": 250.0, "y": 50.0}, {"color": "blue", "font": {"color": "black"}, "id": "C3", "label": "Cust 3\nDemand=10.0", "shape": "dot", "size": 14.0, "x": 200.0, "y": 150.0}, {"color": "blue", "font": {"color": "black"}, "id": "C4", "label": "Cust 4\nDemand=40.0", "shape": "dot", "size": 26.0, "x": 250.0, "y": 350.0}, {"color": "blue", "font": {"color": "black"}, "id": "C5", "label": "Cust 5\nDemand=50.0", "shape": "dot", "size": 30.0, "x": 250.0, "y": 100.0}, {"color": "blue", "font": {"color": "black"}, "id": "C6", "label": "Cust 6\nDemand=10.0", "shape": "dot", "size": 14.0, "x": 200.0, "y": 150.0}, {"color": "blue", "font": {"color": "black"}, "id": "C7", "label": "Cust 7\nDemand=30.0", "shape": "dot", "size": 22.0, "x": 250.0, "y": 400.0}, {"color": "blue", "font": {"color": "black"}, "id": "C8", "label": "Cust 8\nDemand=20.0", "shape": "dot", "size": 18.0, "x": 200.0, "y": 250.0}, {"color": "gray", "font": {"color": "black"}, "id": "F0", "label": "Facility 0\nOpen=False", "shape": "box", "size": 35, "x": 50.0, "y": 400.0}, {"color": "red", "font": {"color": "black"}, "id": "F1", "label": "Facility 1\nOpen=True", "shape": "box", "size": 35, "x": 150.0, "y": 250.0}, {"color": "gray", "font": {"color": "black"}, "id": "F2", "label": "Facility 2\nOpen=False", "shape": "box", "size": 35, "x": 100.0, "y": 250.0}, {"color": "red", "font": {"color": "black"}, "id": "F3", "label": "Facility 3\nOpen=True", "shape": "box", "size": 35, "x": 250.0, "y": 300.0}]);
+                  edges = new vis.DataSet([{"color": "black", "from": "C0", "title": "Customer 0 \u2192 Facility 1", "to": "F1", "width": 2}, {"color": "black", "from": "C1", "title": "Customer 1 \u2192 Facility 1", "to": "F1", "width": 2}, {"color": "black", "from": "C2", "title": "Customer 2 \u2192 Facility 1", "to": "F1", "width": 2}, {"color": "black", "from": "C3", "title": "Customer 3 \u2192 Facility 1", "to": "F1", "width": 2}, {"color": "black", "from": "C4", "title": "Customer 4 \u2192 Facility 3", "to": "F3", "width": 2}, {"color": "black", "from": "C5", "title": "Customer 5 \u2192 Facility 1", "to": "F1", "width": 2}, {"color": "black", "from": "C6", "title": "Customer 6 \u2192 Facility 1", "to": "F1", "width": 2}, {"color": "black", "from": "C7", "title": "Customer 7 \u2192 Facility 3", "to": "F3", "width": 2}, {"color": "black", "from": "C8", "title": "Customer 8 \u2192 Facility 1", "to": "F1", "width": 2}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+<div>
+    <img src="MatplotLib.PNG" alt="Facility Location Animation" width="50%" height="50%" style="border: 1px solid lightgray;"></img>
+<br><p>
+<div><b>Supply Chain + AI = The future is already here.</b></div>
+<div>The Facility Location Problem (FLP) &mdash; deciding which facilities to open to serve customers at the lowest cost &mdash; is a classic optimization challenge. Traditionally, we rely on MILP, heuristics, metaheuristics or simulation.</div>
+<div>But recently, I explored a different path:</div>
+<div>🔥 Graph Neural Networks (GNNs) for network design.</div>
+<div>🧠 Why GNN for FLP?</div>
+<div>Facility location is inherently a graph problem:</div>
+<div>&bull; &nbsp; Customers &rarr; nodes</div>
+<div>&bull; &nbsp; Facilities &rarr; nodes</div>
+<div>&bull; &nbsp; Distances / costs &rarr; edges</div>
+<div>&bull; &nbsp; Demand &rarr; node features</div>
+<div>&bull; &nbsp; Capacities / constraints &rarr; node attributes</div>
+<br />
+<h3>Traditional models compute optimal solutions, but they struggle with:</h3>
+<div>❗ large networks</div>
+<div>❗ real-time re-optimization</div>
+<div>❗ frequent scenario changes</div>
+<div>❗ need for fast approximation at scale</div>
+<br />
+<h3>This is where GNNs shine.</h3>
+<div>⚡ What GNNs Bring to FLP</div>
+<div>✔ Learn how demand clusters form</div>
+<div>✔ Understand network structure</div>
+<div>✔ Predict facility openings directly</div>
+<div>✔ Solve near-optimal FLP without running MILP every time</div>
+<div>✔ Scale easily to thousands of nodes</div>
+<div>✔ Produce instant predictions after training</div>
+<div>In my experiment, the GNN identified the best 2 facilities to open for a small network based purely on learned spatial, demand, and connectivity patterns &mdash; no solver calls, no branch-and-bound, just learned structure.</div>
+<br />
+<h3>📌 Why this is exciting for Supply Chain</h3>
+<div>This approach opens doors to:</div>
+<div>🔹 Real-time network design</div>
+<div>🔹 Rapid scenario planning</div>
+<div>🔹 Instant redesign under demand shocks</div>
+<div>🔹 Self-learning supply chain models</div>
+<div>🔹 AI-assisted optimization for planners</div>
+<div>GNNs won&rsquo;t replace optimization solvers &mdash; but they can augment, accelerate, and automate decision-making in modern supply chains.</div>
+<br />
+<div>Graph AI will reshape network design, hub selection, routing, inventory placement, supplier selection, and transport planning &mdash; and the Facility Location Problem (FLP) is the perfect place to begin this transformation.</div>
+<br /><br />
+<h2>Steps:</h2>
+<h3># Data Preparation :</h3>
+<div>&nbsp;We build bipartite edges so the GNN can learn the true assignment &amp; distance relationships that define FLP &mdash; enabling it to predict optimal facility locations. The data is prepared using any exact method (MILP)</div>
+<div>1.Construct Graph Node Features (customer&ndash;facility pairs)</div>
+<div>2.Node Labels (Supervision for Training)</div>
+<div>3.Save as PyTorch Geometric Dataset</div>
+<br />
+<h3>GNN Training:</h3>
+<div>1. Define the GNN Model (GraphSAGE)</div>
+<div>2. Load the Prepared Dataset</div>
+<div>3. Initialize Training Components</div>
+<div>4. Training and validation Loop (forward and back propagation)</div>
+<div>6. Save the Trained Model</div>
+<br />
+<h2># Predict with the required data and visualise</h2>
+</div>
+<!-- Comments are visible in the HTML source only -->
+
+
+    </body>
+</html>
