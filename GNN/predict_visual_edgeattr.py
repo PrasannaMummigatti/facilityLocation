@@ -3,6 +3,10 @@ import torch.nn.functional as F
 from torch_geometric.nn import NNConv
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+
+def getImage(path, zoom=1):
+    return OffsetImage(plt.imread(path), zoom=0.08)
 
 # ============================================================
 # 1. MODEL (must match training version)
@@ -119,7 +123,7 @@ x, edge_index, edge_attr, M, num_facilities  = build_graph_tensors(
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 model = FLPGNN_EdgeAttr(input_dim=3, hidden_dim=64, edge_attr_dim=1).to(device)
-model.load_state_dict(torch.load("flp_gnn_model_edgeattr.pt", map_location=device))
+model.load_state_dict(torch.load("./GNN/flp_gnn_model_edgeattr.pt", map_location=device))
 model.eval()
 
 with torch.no_grad():
@@ -149,15 +153,25 @@ plt.figure(figsize=(8,6), facecolor='lightyellow')
 
 # Customers
 plt.scatter(customer_coords[:,0], customer_coords[:,1],
-            s=customer_demand*1, c="blue", label="Customers")
+            s=customer_demand*3, c="blue", label="Customers")
 
 # All facilities
 plt.scatter(facility_coords[:,0], facility_coords[:,1],
-            s=50, c="gray", marker="s", label="All Facilities")
+            s=80, c="gray", marker="s", label="All Facilities")
+
+for i, (x, y) in enumerate(zip(facility_coords[:,0], facility_coords[:,1])):
+    ab = AnnotationBbox(getImage('house-Gray.png'), (x, y), frameon=False)
+    plt.gca().add_artist(ab)
+
 
 # Open facilities
 plt.scatter(facility_coords[top_p_idx,0], facility_coords[top_p_idx,1],
-            s=50, c="red", marker="s", label="Open Facilities")
+            s=80, c="red", marker="s", label="Open Facilities")
+for i, (x, y) in enumerate(zip(facility_coords[top_p_idx,0], facility_coords[top_p_idx,1])):
+    ab = AnnotationBbox(getImage('house-xxl.png'), (x, y), frameon=False)
+    plt.gca().add_artist(ab)
+
+
 
 # Draw assignment lines
 for i in range(M):
@@ -171,7 +185,7 @@ for i in range(M):
 plt.title(f"GNN Prediction with Distance Edge Features (p={p})")
 plt.xlabel("X")
 plt.ylabel("Y")
-plt.legend()
+plt.legend(facecolor='lightyellow', edgecolor='none', markerscale=0.4,loc='lower center')
 plt.grid(False)
 plt.axis('off')
 plt.show()

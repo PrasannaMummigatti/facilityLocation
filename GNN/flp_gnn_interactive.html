@@ -49,13 +49,13 @@
     </head>
 
 
-<body style="background-color: lightyellow;">
+<body style="background-color: lightyellow;margin: 5%;">
 
 <h2> 🚀 Using Graph Neural Networks (GNNs) to Solve the Facility Location Problem (FLP)</h2><br>
 
 
-        <div class="card" style="width: 50%;height:50%; float:left;margin:auto;background-color: lightyellow;">
-            <h4 class="card" style="background-color: lightyellow;">Interactive Graph (drag to pan, scroll to zoom)</h4>
+        <div class="card" style="width: 50%;height:80%; float:left;margin:auto;background-color: lightyellow;">
+            <h4 class="card" style="background-color: lightyellow;">Interactive bipartite Graph (drag to pan, scroll to zoom)</h4>
             <div id="mynetwork" class="card-body" style="background-color: lightyellow;"></div>
         </div>
 
@@ -164,10 +164,10 @@
               drawGraph();
         </script>
 <div>
-    <img src="MatplotLib.PNG" alt="Facility Location Animation" width="50%" height="50%" style="border: 1px solid lightgray;"></img>
+    <img src="MatplotLib.PNG" alt="Facility Location Animation" width="50%" height="80%" style="border: 1px solid lightgray;"></img>
 <br><p>
 <div><b>Supply Chain + AI = The future is already here.</b></div>
-<div>The Facility Location Problem (FLP) &mdash; deciding which facilities to open to serve customers at the lowest cost &mdash; is a classic optimization challenge. Traditionally, we rely on MILP, heuristics, metaheuristics or simulation.</div>
+<div>The Facility Location Problem (FLP) &mdash; deciding which facilities to open to serve customers at the lowest cost <br>&mdash; is a classic optimization challenge. Traditionally, we rely on MILP, heuristics, metaheuristics or simulation.</div>
 <div>But recently, I explored a different path:</div>
 <div>🔥 Graph Neural Networks (GNNs) for network design.</div>
 <div>🧠 Why GNN for FLP?</div>
@@ -192,7 +192,7 @@
 <div>✔ Solve near-optimal FLP without running MILP every time</div>
 <div>✔ Scale easily to thousands of nodes</div>
 <div>✔ Produce instant predictions after training</div>
-<div>In my experiment, the GNN identified the best 2 facilities to open for a small network based purely on learned spatial, demand, and connectivity patterns &mdash; no solver calls, no branch-and-bound, just learned structure.</div>
+<div>In my experiment, the GNN identified the best 2 facilities to open for a small network based purely on learned spatial, demand,<br> and connectivity patterns &mdash; no solver calls, no branch-and-bound, just learned structure.</div>
 <br />
 <h3>📌 Why this is exciting for Supply Chain</h3>
 <div>This approach opens doors to:</div>
@@ -203,11 +203,11 @@
 <div>🔹 AI-assisted optimization for planners</div>
 <div>GNNs won&rsquo;t replace optimization solvers &mdash; but they can augment, accelerate, and automate decision-making in modern supply chains.</div>
 <br />
-<div>Graph AI will reshape network design, hub selection, routing, inventory placement, supplier selection, and transport planning &mdash; and the Facility Location Problem (FLP) is the perfect place to begin this transformation.</div>
+<div>Graph AI will reshape network design, hub selection, routing, inventory placement, supplier selection, and transport planning <br>&mdash; and the Facility Location Problem (FLP) is the perfect place to begin this transformation.</div>
 <br /><br />
 <h2>Steps:</h2>
 <h3># Data Preparation :</h3>
-<div>&nbsp;We build bipartite edges so the GNN can learn the true assignment &amp; distance relationships that define FLP &mdash; enabling it to predict optimal facility locations. The data is prepared using any exact method (MILP)</div>
+<div>&nbsp;We build bipartite edges so the GNN can learn the true assignment &amp; distance relationships that define FLP <br>&mdash; enabling it to predict optimal facility locations. The data is prepared using any exact method (MILP)</div>
 <div>1.Construct Graph Node Features (customer&ndash;facility pairs)</div>
 <div>2.Node Labels (Supervision for Training)</div>
 <div>3.Save as PyTorch Geometric Dataset</div>
